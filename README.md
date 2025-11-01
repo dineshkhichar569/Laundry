@@ -10,11 +10,6 @@ Built using **HTML, CSS, and JavaScript**, and deployed via **Netlify**.
 
 ---
 
-## 📸 Preview  
-![Laundry Website Screenshot](assets/wash.png)
-
----
-
 ## 🧾 Features  
 - Responsive, mobile-friendly layout  
 - Hero section with CTA (“Book a Service Today”)  
