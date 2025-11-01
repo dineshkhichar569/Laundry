@@ -11,7 +11,7 @@ Built using **HTML, CSS, and JavaScript**, and deployed via **Netlify**.
 ---
 
 ## 📸 Preview  
-![Laundry Website Screenshot](./assets/preview.png)
+![Laundry Website Screenshot](/assets/preview.png)
 
 ---
 
