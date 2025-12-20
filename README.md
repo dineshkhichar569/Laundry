@@ -36,7 +36,7 @@ Laundry/
 │
 ├── assets/ # Images, icons, and other static resources
 ├── index.html # Main landing page
-├── style.css # Stylesheet
+├── style.css # Stylesheet for animations and smooth interactions
 └── scrip.js # JS file for interactions
 ```
 
