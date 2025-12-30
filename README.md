@@ -50,7 +50,7 @@ Laundry/
 2. Navigate to the project directory
    ```bash
    cd Laundry
-3. Open index.html in your browser
+3. Open **index.html** in your browser
 
 ## 💡 How It Works  
 1. Browse available laundry services (Dry Cleaning, Wash & Fold, Ironing, etc.).  
