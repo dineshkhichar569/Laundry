@@ -34,7 +34,7 @@ Built using **HTML, CSS, and JavaScript**, and deployed via **Netlify**.
 ```bash
 Laundry/
 │
-├── assets/ # Images, icons, and other static resources
+├── assets/ # Images, icons.
 ├── index.html # Main landing page
 ├── style.css # Stylesheet for animations and smooth interactions
 └── scrip.js # JS file for interactions
