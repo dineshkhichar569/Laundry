@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { apiRequest } from "../api";
+import { trackBooking } from "../api/differentApis/bookings/trackBooking.api";
 
 function TrackOrder() {
   const [trackingId, setTrackingId] = useState("");
@@ -8,13 +8,12 @@ function TrackOrder() {
 
   async function handleTrack(e) {
     e.preventDefault();
-    setError("");
-    setBooking(null);
+    setError(""); setBooking(null);
     try {
-      const data = await apiRequest(`/bookings/track/${trackingId}`);
-      setBooking(data);
+      const res = await trackBooking(trackingId);
+      setBooking(res.data);
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || "Not found");
     }
   }
 
@@ -55,12 +54,10 @@ function TrackOrder() {
             </span>
           </p>
           <p className="text-sm text-gray-600">
-            <strong>Items:</strong>{" "}
-            {booking.items.map((i) => `${i.name} x${i.quantity}`).join(", ")}
+            <strong>Items:</strong> {booking.items.map((i) => `${i.name} x${i.quantity}`).join(", ")}
           </p>
           <p className="text-sm text-gray-600 mt-2">
-            <strong>Booked on:</strong>{" "}
-            {new Date(booking.createdAt).toLocaleString()}
+            <strong>Booked on:</strong> {new Date(booking.createdAt).toLocaleString()}
           </p>
         </div>
       )}

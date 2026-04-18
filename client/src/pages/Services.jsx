@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { apiRequest } from "../api";
+import { getAllServices } from "../api/differentApis/services/getAllServices.api";
 
 function Services() {
   const [services, setServices] = useState([]);
 
   useEffect(() => {
-    apiRequest("/services").then(setServices);
+    getAllServices()
+      .then((res) => setServices(res.data))
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -20,10 +22,7 @@ function Services() {
             <p className="text-sm text-gray-600 mt-1">{s.description}</p>
             <div className="flex items-center justify-between mt-4">
               <span className="text-2xl font-bold text-brand">₹{s.price}</span>
-              <Link
-                to="/book"
-                className="px-4 py-2 bg-brand text-white rounded-lg text-sm font-semibold"
-              >
+              <Link to="/book" className="px-4 py-2 bg-brand text-white rounded-lg text-sm font-semibold">
                 Book
               </Link>
             </div>

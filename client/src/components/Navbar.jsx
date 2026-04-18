@@ -1,15 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { getUser, isAdmin, logout } from "../utils/auth";
 
 function Navbar() {
-  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+
+  const user = getUser();
 
   function handleLogout() {
     logout();
     navigate("/");
+    window.location.reload();
   }
 
   return (
@@ -21,76 +23,31 @@ function Navbar() {
 
         {/* Desktop menu */}
         <ul className="hidden md:flex gap-6 text-gray-700 font-semibold">
-          <li>
-            <Link to="/" className="hover:text-brand">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link to="/services" className="hover:text-brand">
-              Services
-            </Link>
-          </li>
-          <li>
-            <Link to="/pricing" className="hover:text-brand">
-              Pricing
-            </Link>
-          </li>
-          <li>
-            <Link to="/blog" className="hover:text-brand">
-              Blog
-            </Link>
-          </li>
-          <li>
-            <Link to="/about" className="hover:text-brand">
-              About
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact" className="hover:text-brand">
-              Contact
-            </Link>
-          </li>
+          <li><Link to="/" className="hover:text-brand">Home</Link></li>
+          <li><Link to="/services" className="hover:text-brand">Services</Link></li>
+          <li><Link to="/pricing" className="hover:text-brand">Pricing</Link></li>
+          <li><Link to="/blog" className="hover:text-brand">Blog</Link></li>
+          <li><Link to="/about" className="hover:text-brand">About</Link></li>
+          <li><Link to="/contact" className="hover:text-brand">Contact</Link></li>
         </ul>
 
         <div className="hidden md:flex gap-3">
           {user ? (
             <>
-              <Link
-                to="/dashboard"
-                className="px-4 py-2 bg-brandLight text-brandDark rounded-lg font-semibold"
-              >
+              <Link to="/dashboard" className="px-4 py-2 bg-brandLight text-brandDark rounded-lg font-semibold">
                 {user.name}
               </Link>
-              {user.role === "admin" && (
-                <Link
-                  to="/admin"
-                  className="px-4 py-2 bg-gray-200 rounded-lg font-semibold"
-                >
-                  Admin
-                </Link>
+              {isAdmin() && (
+                <Link to="/admin" className="px-4 py-2 bg-gray-200 rounded-lg font-semibold">Admin</Link>
               )}
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg"
-              >
+              <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded-lg">
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link
-                to="/login"
-                className="px-4 py-2 text-gray-700 font-semibold"
-              >
-                Login
-              </Link>
-              <Link
-                to="/signup"
-                className="px-4 py-2 bg-brand text-white rounded-lg"
-              >
-                Sign Up
-              </Link>
+              <Link to="/login" className="px-4 py-2 text-gray-700 font-semibold">Login</Link>
+              <Link to="/signup" className="px-4 py-2 bg-brand text-white rounded-lg">Sign Up</Link>
             </>
           )}
         </div>
@@ -104,52 +61,21 @@ function Navbar() {
       {/* Mobile menu */}
       {open && (
         <div className="md:hidden bg-white border-t px-4 py-4 space-y-2">
-          {["/", "/services", "/pricing", "/blog", "/about", "/contact"].map(
-            (path) => (
-              <Link
-                key={path}
-                to={path}
-                onClick={() => setOpen(false)}
-                className="block py-2 font-semibold text-gray-700"
-              >
-                {path === "/"
-                  ? "Home"
-                  : path.slice(1).charAt(0).toUpperCase() + path.slice(2)}
-              </Link>
-            ),
-          )}
+          <Link to="/" onClick={() => setOpen(false)} className="block py-2 font-semibold text-gray-700">Home</Link>
+          <Link to="/services" onClick={() => setOpen(false)} className="block py-2 font-semibold text-gray-700">Services</Link>
+          <Link to="/pricing" onClick={() => setOpen(false)} className="block py-2 font-semibold text-gray-700">Pricing</Link>
+          <Link to="/blog" onClick={() => setOpen(false)} className="block py-2 font-semibold text-gray-700">Blog</Link>
+          <Link to="/about" onClick={() => setOpen(false)} className="block py-2 font-semibold text-gray-700">About</Link>
+          <Link to="/contact" onClick={() => setOpen(false)} className="block py-2 font-semibold text-gray-700">Contact</Link>
           {user ? (
             <>
-              <Link
-                to="/dashboard"
-                onClick={() => setOpen(false)}
-                className="block py-2 text-brand font-semibold"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="block py-2 text-red-500 font-semibold"
-              >
-                Logout
-              </button>
+              <Link to="/dashboard" onClick={() => setOpen(false)} className="block py-2 text-brand font-semibold">Dashboard</Link>
+              <button onClick={handleLogout} className="block py-2 text-red-500 font-semibold">Logout</button>
             </>
           ) : (
             <>
-              <Link
-                to="/login"
-                onClick={() => setOpen(false)}
-                className="block py-2 font-semibold"
-              >
-                Login
-              </Link>
-              <Link
-                to="/signup"
-                onClick={() => setOpen(false)}
-                className="block py-2 text-brand font-semibold"
-              >
-                Sign Up
-              </Link>
+              <Link to="/login" onClick={() => setOpen(false)} className="block py-2 font-semibold">Login</Link>
+              <Link to="/signup" onClick={() => setOpen(false)} className="block py-2 text-brand font-semibold">Sign Up</Link>
             </>
           )}
         </div>

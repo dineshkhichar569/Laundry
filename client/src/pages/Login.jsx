@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { login } from "../api/differentApis/auth/login.api";
+import { saveUser } from "../utils/auth";
 
 function Login() {
-  const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,10 +13,12 @@ function Login() {
     e.preventDefault();
     setError("");
     try {
-      await login(email, password);
+      const res = await login({ email, password });
+      saveUser(res.data);
       navigate("/dashboard");
+      window.location.reload(); // refresh so navbar shows user
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || "Login failed");
     }
   }
 
@@ -42,18 +44,12 @@ function Login() {
             className="w-full px-4 py-3 border rounded-lg"
           />
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button
-            type="submit"
-            className="w-full py-3 bg-brand text-white rounded-lg font-semibold"
-          >
+          <button type="submit" className="w-full py-3 bg-brand text-white rounded-lg font-semibold">
             Login
           </button>
         </form>
         <p className="text-center mt-4 text-sm">
-          No account?{" "}
-          <Link to="/signup" className="text-brand font-semibold">
-            Sign up
-          </Link>
+          No account? <Link to="/signup" className="text-brand font-semibold">Sign up</Link>
         </p>
       </div>
     </div>

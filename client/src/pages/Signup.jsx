@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { register } from "../api/differentApis/auth/register.api";
+import { saveUser } from "../utils/auth";
 
 function Signup() {
-  const { register } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
   const [error, setError] = useState("");
@@ -16,10 +16,12 @@ function Signup() {
     e.preventDefault();
     setError("");
     try {
-      await register(form);
+      const res = await register(form);
+      saveUser(res.data);
       navigate("/dashboard");
+      window.location.reload();
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || "Signup failed");
     }
   }
 

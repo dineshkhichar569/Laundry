@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
-import { apiRequest } from "../api";
+import { getMyBookings } from "../api/differentApis/bookings/getMyBookings.api";
+import { cancelBooking } from "../api/differentApis/bookings/cancelBooking.api";
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   function load() {
-    apiRequest("/bookings/mine").then(setBookings);
+    getMyBookings()
+      .then((res) => setBookings(res.data))
+      .catch((err) => console.log(err));
   }
 
-  useEffect(() => {
-    load();
-  }, []);
+  useEffect(() => { load(); }, []);
 
   async function cancel(id) {
     if (!window.confirm("Cancel this booking?")) return;
-    await apiRequest(`/bookings/${id}`, "DELETE");
+    await cancelBooking(id);
     load();
   }
 
@@ -40,13 +41,9 @@ function MyBookings() {
               <div className="flex justify-between items-start mb-3">
                 <div>
                   <p className="text-xs text-gray-500">Tracking ID</p>
-                  <p className="font-mono font-bold text-brand">
-                    {b.trackingId}
-                  </p>
+                  <p className="font-mono font-bold text-brand">{b.trackingId}</p>
                 </div>
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-semibold uppercase ${statusColor[b.status] || "bg-gray-100"}`}
-                >
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase ${statusColor[b.status] || "bg-gray-100"}`}>
                   {b.status}
                 </span>
               </div>
@@ -60,10 +57,7 @@ function MyBookings() {
                 <span className="font-bold text-lg">₹{b.total}</span>
               </div>
               {b.status !== "delivered" && b.status !== "cancelled" && (
-                <button
-                  onClick={() => cancel(b._id)}
-                  className="mt-3 text-sm text-red-600 font-semibold"
-                >
+                <button onClick={() => cancel(b._id)} className="mt-3 text-sm text-red-600 font-semibold">
                   Cancel booking
                 </button>
               )}

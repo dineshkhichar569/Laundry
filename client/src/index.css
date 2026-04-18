@@ -2,3 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+.hero-img {
+  width: 100%;
+  max-width: 620px;
+  height: 450px;
+  object-fit: contain;
+  filter: drop-shadow(5px 5px 50px lightpink);
+  animation: anime 1s linear infinite alternate both;
+}
+
+@keyframes anime {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-18px);
+  }
+}

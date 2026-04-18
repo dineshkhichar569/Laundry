@@ -1,21 +1,19 @@
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
-import { apiRequest } from "../api";
+import { getMyBookings } from "../api/differentApis/bookings/getMyBookings.api";
+import { getUser } from "../utils/auth";
 
 function Dashboard() {
-  const { user } = useAuth();
+  const user = getUser();
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    apiRequest("/bookings/mine")
-      .then(setBookings)
-      .catch(() => {});
+    getMyBookings()
+      .then((res) => setBookings(res.data))
+      .catch((err) => console.log(err));
   }, []);
 
-  const active = bookings.filter(
-    (b) => b.status !== "delivered" && b.status !== "cancelled",
-  ).length;
+  const active = bookings.filter((b) => b.status !== "delivered" && b.status !== "cancelled").length;
   const completed = bookings.filter((b) => b.status === "delivered").length;
 
   return (
@@ -39,17 +37,11 @@ function Dashboard() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
-        <Link
-          to="/book"
-          className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md"
-        >
+        <Link to="/book" className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md">
           <h3 className="font-bold text-lg">Book new pickup →</h3>
           <p className="text-sm text-gray-600">Schedule a laundry pickup</p>
         </Link>
-        <Link
-          to="/my-bookings"
-          className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md"
-        >
+        <Link to="/my-bookings" className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md">
           <h3 className="font-bold text-lg">My bookings →</h3>
           <p className="text-sm text-gray-600">See orders and status</p>
         </Link>
