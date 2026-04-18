@@ -44,20 +44,27 @@ function FAQ() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold text-center mb-4">Frequently Asked Questions</h1>
+      <h1 className="text-4xl font-bold text-center mb-4">
+        Frequently Asked Questions
+      </h1>
       <p className="text-center text-gray-600 mb-10">
         Everything you need to know about our services
       </p>
 
       <div className="space-y-3">
         {faqs.map((faq, i) => (
-          <div key={i} className="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div
+            key={i}
+            className="bg-white rounded-xl shadow-sm overflow-hidden"
+          >
             <button
               onClick={() => toggle(i)}
               className="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50"
             >
               <span className="font-semibold">{faq.q}</span>
-              <span className="text-brand text-xl">{openIndex === i ? "−" : "+"}</span>
+              <span className="text-brand text-xl">
+                {openIndex === i ? "−" : "+"}
+              </span>
             </button>
             {openIndex === i && (
               <div className="px-6 pb-4 text-gray-600 text-sm border-t pt-3">

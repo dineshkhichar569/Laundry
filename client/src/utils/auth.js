@@ -1,11 +1,14 @@
 export function saveUser(userData) {
   localStorage.setItem("token", userData.token);
-  localStorage.setItem("user", JSON.stringify({
-    _id: userData._id,
-    name: userData.name,
-    email: userData.email,
-    role: userData.role,
-  }));
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      _id: userData._id,
+      name: userData.name,
+      email: userData.email,
+      role: userData.role,
+    }),
+  );
 }
 
 export function getUser() {

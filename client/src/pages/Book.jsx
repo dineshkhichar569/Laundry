@@ -1,5 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Sparkles,
+  ArrowRight,
+  Phone,
+  MapPin,
+  CalendarDays,
+  ShoppingBag,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { getAllServices } from "../api/differentApis/services/getAllServices.api";
 import { createBooking } from "../api/differentApis/bookings/createBooking.api";
 
@@ -14,16 +24,24 @@ function Book() {
 
   useEffect(() => {
     getAllServices()
-      .then((res) => setServices(res.data))
+      .then((res) => setServices(res.data || []))
       .catch((err) => console.log(err));
   }, []);
 
   function addToCart(service) {
     const existing = cart.find((i) => i.name === service.name);
+
     if (existing) {
-      setCart(cart.map((i) => i.name === service.name ? { ...i, quantity: i.quantity + 1 } : i));
+      setCart(
+        cart.map((i) =>
+          i.name === service.name ? { ...i, quantity: i.quantity + 1 } : i,
+        ),
+      );
     } else {
-      setCart([...cart, { name: service.name, price: service.price, quantity: 1 }]);
+      setCart([
+        ...cart,
+        { name: service.name, price: service.price, quantity: 1 },
+      ]);
     }
   }
 
@@ -31,15 +49,27 @@ function Book() {
     setCart(cart.filter((i) => i.name !== name));
   }
 
-  const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const total = useMemo(
+    () => cart.reduce((sum, i) => sum + i.price * i.quantity, 0),
+    [cart],
+  );
 
   async function handleBook(e) {
     e.preventDefault();
     setError("");
-    if (cart.length === 0) return setError("Please add services to cart");
+
+    if (cart.length === 0) {
+      return setError("Please add services to cart");
+    }
 
     try {
-      const res = await createBooking({ items: cart, phone, address, pickupDate });
+      const res = await createBooking({
+        items: cart,
+        phone,
+        address,
+        pickupDate,
+      });
+
       alert(`Booking successful! Tracking ID: ${res.data.trackingId}`);
       navigate("/my-bookings");
     } catch (err) {
@@ -48,60 +78,225 @@ function Book() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12 grid lg:grid-cols-3 gap-6">
-      {/* Services */}
-      <div className="lg:col-span-2 bg-white p-6 rounded-xl">
-        <h2 className="text-2xl font-bold mb-4">Pick services</h2>
-        <div className="space-y-3">
-          {services.map((s) => (
-            <div key={s._id} className="flex items-center justify-between border-b py-3">
-              <div>
-                <p className="font-semibold">{s.icon} {s.name}</p>
-                <p className="text-brand font-bold">₹{s.price}</p>
-              </div>
-              <button onClick={() => addToCart(s)} className="px-4 py-2 bg-brandLight text-brandDark rounded-lg font-semibold text-sm">
-                + Add
-              </button>
-            </div>
-          ))}
-        </div>
+    <div className="min-h-screen bg-[#edf5fa] overflow-hidden text-slate-900">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-120px] left-[-80px] h-[280px] w-[280px] rounded-full bg-pink-300/25 blur-3xl" />
+        <div className="absolute top-[80px] right-[8%] h-[340px] w-[340px] rounded-full bg-fuchsia-300/25 blur-3xl" />
+        <div className="absolute bottom-[40px] left-[40%] h-[220px] w-[220px] rounded-full bg-sky-300/25 blur-3xl" />
       </div>
 
-      {/* Cart + Form */}
-      <div className="space-y-4">
-        <div className="bg-white p-5 rounded-xl">
-          <h3 className="font-bold text-lg mb-3">Cart ({cart.length})</h3>
-          {cart.length === 0 ? (
-            <p className="text-gray-500 text-center py-4 text-sm">Cart empty</p>
-          ) : (
-            cart.map((item) => (
-              <div key={item.name} className="flex justify-between items-center py-2">
-                <div className="text-sm">
-                  <p className="font-semibold">{item.name}</p>
-                  <p className="text-gray-500">₹{item.price} × {item.quantity}</p>
-                </div>
-                <button onClick={() => removeFromCart(item.name)} className="text-red-500 text-sm">
-                  Remove
-                </button>
-              </div>
-            ))
-          )}
-          <div className="flex justify-between mt-3 pt-3 border-t font-bold">
-            <span>Total</span><span className="text-brand">₹{total}</span>
+      <section className="relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-14 md:pt-20 pb-10 md:pb-12">
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/70 backdrop-blur px-4 py-1.5 text-xs sm:text-sm font-medium text-slate-700 shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-[#ef27c7]" />
+              Quick pickup booking
+            </div>
+
+            <h1 className="mt-5 text-[30px] sm:text-[44px] lg:text-[52px] leading-[1.05] font-extrabold tracking-[-0.03em] text-slate-900">
+              Book your <span className="text-[#ef27c7]">laundry pickup</span>
+            </h1>
+
+            <p className="mt-5 max-w-3xl mx-auto text-base sm:text-lg leading-1 text-slate-500">
+              Pick your services, add pickup details, and confirm your order in
+              one smooth flow.
+            </p>
           </div>
         </div>
+      </section>
 
-        <form onSubmit={handleBook} className="bg-white p-5 rounded-xl space-y-3">
-          <h3 className="font-bold text-lg">Pickup Details</h3>
-          <input placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} required className="w-full px-4 py-2 border rounded-lg" />
-          <input placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)} required className="w-full px-4 py-2 border rounded-lg" />
-          <input type="date" value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} required className="w-full px-4 py-2 border rounded-lg" />
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button type="submit" className="w-full py-3 bg-brand text-white rounded-lg font-semibold">
-            Confirm Booking
-          </button>
-        </form>
-      </div>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-16 md:pb-24">
+        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
+          {/* Services */}
+          <div className="rounded-2xl border border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_18px_45px_rgba(15,23,42,0.06)] p-6 sm:p-8">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] font-semibold text-slate-400">
+                  Step 1
+                </p>
+                <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">
+                  Pick services
+                </h2>
+              </div>
+
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#fdf2f8] px-3 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-[#ef27c7]">
+                <ShoppingBag className="w-3.5 h-3.5" />
+                {services.length} Services
+              </div>
+            </div>
+
+            <div className="mt-8 space-y-4">
+              {services.map((s, index) => (
+                <div
+                  key={s._id}
+                  className="group rounded-2xl border border-slate-100 bg-[#f8fbfd] p-5 transition duration-300 hover:bg-white hover:border-pink-100 hover:shadow-[0_10px_25px_rgba(239,39,199,0.08)]"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0 flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-50 to-sky-50 text-[#ef27c7] flex items-center justify-center text-2xl shadow-sm shrink-0">
+                        {s.icon || "🧺"}
+                      </div>
+
+                      <div className="min-w-0">
+                        <p className="text-[11px] uppercase tracking-[0.16em] font-semibold text-slate-400">
+                          Service {index + 1}
+                        </p>
+                        <h3 className="mt-1 text-lg sm:text-xl font-extrabold text-slate-900 leading-tight">
+                          {s.name}
+                        </h3>
+                        {s.description && (
+                          <p className="mt-2 text-sm leading-6 text-slate-500">
+                            {s.description}
+                          </p>
+                        )}
+                        <p className="mt-3 text-xl font-extrabold text-[#ef27c7]">
+                          ₹{s.price}
+                        </p>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => addToCart(s)}
+                      className="shrink-0 inline-flex items-center gap-2 px-4 h-11 rounded-xl bg-[#ef27c7] text-white text-sm font-bold shadow-[0_14px_30px_rgba(239,39,199,0.24)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_35px_rgba(239,39,199,0.30)]"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Add
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Order summary + form */}
+          <div className="rounded-3xl border border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_18px_45px_rgba(15,23,42,0.06)] p-6 sm:p-8 h-fit lg:sticky lg:top-24">
+            <p className="text-xs uppercase tracking-[0.2em] font-semibold text-slate-400">
+              Step 2
+            </p>
+            <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">
+              Confirm booking
+            </h2>
+
+            {/* Cart */}
+            <div className="mt-8 rounded-2xl bg-[#f8fbfd] border border-white p-5">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-extrabold text-slate-900">
+                  Cart ({cart.length})
+                </h3>
+                <span className="text-sm font-semibold text-slate-400">
+                  Summary
+                </span>
+              </div>
+
+              {cart.length === 0 ? (
+                <p className="text-sm text-slate-500 text-center py-8">
+                  Cart is empty
+                </p>
+              ) : (
+                <div className="mt-4 space-y-3">
+                  {cart.map((item) => (
+                    <div
+                      key={item.name}
+                      className="flex items-start justify-between gap-3 rounded-xl bg-white border border-slate-100 p-4"
+                    >
+                      <div className="min-w-0">
+                        <p className="font-bold text-slate-900 text-sm sm:text-base">
+                          {item.name}
+                        </p>
+                        <p className="text-sm text-slate-500 mt-1">
+                          ₹{item.price} × {item.quantity}
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={() => removeFromCart(item.name)}
+                        className="shrink-0 inline-flex items-center gap-1 text-red-500 text-sm font-semibold hover:text-red-600 transition"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-200">
+                <span className="text-sm font-semibold text-slate-500">
+                  Total
+                </span>
+                <span className="text-2xl font-extrabold text-[#ef27c7]">
+                  ₹{total}
+                </span>
+              </div>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleBook} className="mt-6 space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Phone
+                </label>
+                <div className="relative">
+                  <Phone className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                  <input
+                    placeholder="Enter phone number"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
+                    className="w-full h-12 rounded-xl border border-slate-200 bg-[#f8fbfd] pl-11 pr-4 text-sm sm:text-base outline-none transition focus:border-[#ef27c7] focus:bg-white focus:ring-4 focus:ring-[#ef27c7]/10"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Address
+                </label>
+                <div className="relative">
+                  <MapPin className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                  <input
+                    placeholder="Enter pickup address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    required
+                    className="w-full h-12 rounded-xl border border-slate-200 bg-[#f8fbfd] pl-11 pr-4 text-sm sm:text-base outline-none transition focus:border-[#ef27c7] focus:bg-white focus:ring-4 focus:ring-[#ef27c7]/10"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Pickup Date
+                </label>
+                <div className="relative">
+                  <CalendarDays className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="date"
+                    value={pickupDate}
+                    onChange={(e) => setPickupDate(e.target.value)}
+                    required
+                    className="w-full h-12 rounded-xl border border-slate-200 bg-[#f8fbfd] pl-11 pr-4 text-sm sm:text-base outline-none transition focus:border-[#ef27c7] focus:bg-white focus:ring-4 focus:ring-[#ef27c7]/10"
+                  />
+                </div>
+              </div>
+
+              {error && (
+                <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="group w-full h-12 rounded-xl bg-[#ef27c7] text-white text-sm sm:text-base font-bold shadow-[0_14px_32px_rgba(239,39,199,0.32)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_45px_rgba(239,39,199,0.4)] flex items-center justify-center gap-2"
+              >
+                Confirm Booking
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
