@@ -7,33 +7,29 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = [
-  process.env.CLIENT_URL,
-  "http://localhost:5173",
-  "http://localhost:8080",
-].filter(Boolean);
-
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error("CORS not allowed"));
-    },
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:8080",
+      "https://laundry-kf4pa124d-dineshkhichar569s-projects.vercel.app",
+      "https://laundry-two-omega.vercel.app",
+    ],
     credentials: true,
-  }),
+  })
 );
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health check
+app.get("/", (req, res) => {
+  res.send("Laundry API is running");
+});
+
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", time: new Date() });
 });
 
-// Routes
 app.use("/api/auth", require("./src/routes/auth.js"));
 app.use("/api/services", require("./src/routes/services"));
 app.use("/api/bookings", require("./src/routes/bookings"));
@@ -46,9 +42,11 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
   } catch (error) {
-    console.error("Server start failed:", error.message);
+    console.error(error);
     process.exit(1);
   }
 };
