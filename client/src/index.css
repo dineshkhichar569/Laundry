@@ -2,20 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-.hero-img {
-  width: 100%;
-  max-width: 620px;
-  height: 450px;
-  object-fit: contain;
-  filter: drop-shadow(5px 5px 50px lightpink);
-  animation: anime 1s linear infinite alternate both;
-}
-
-@keyframes anime {
-  from {
+@keyframes float {
+  0% {
     transform: translateY(0px);
   }
-  to {
+  50% {
     transform: translateY(-18px);
+  }
+  100% {
+    transform: translateY(0px);
   }
 }
