@@ -11,7 +11,6 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "http://localhost:8080",
       "https://laundry-kf4pa124d-dineshkhichar569s-projects.vercel.app",
       "https://laundry-two-omega.vercel.app",
     ],
