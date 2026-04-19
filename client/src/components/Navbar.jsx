@@ -1,10 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { getUser, isAdmin, logout } from "../utils/auth";
 import { Menu, X, Sparkles, User, Shield, LogOut } from "lucide-react";
 
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
 
   const user = getUser();
@@ -23,6 +24,10 @@ function Navbar() {
     { label: "About", to: "/about" },
     { label: "Contact", to: "/contact" },
   ];
+
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
 
   return (
     <nav className="sticky top-0 z-50 border-b border-white/50 bg-[#edf5fa]/80 backdrop-blur-xl">
@@ -118,30 +123,55 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
-      {open && (
-        <div className="lg:hidden border-t border-white/60 bg-[#edf5fa]/95 backdrop-blur-xl">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 space-y-3">
+      {/* Mobile menu overlay */}
+      <div
+        className={`lg:hidden absolute top-full left-0 right-0 transition-all duration-300 ease-out ${
+          open ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+      >
+        {/* Backdrop */}
+        <div
+          onClick={() => setOpen(false)}
+          className={`fixed inset-0 top-[84px] bg-white/10 backdrop-blur-md transition-opacity duration-300 ${
+            open ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
+        {/* Dropdown panel */}
+        <div
+          className={`relative mx-4 mt-3 rounded-[28px] border border-slate-200 bg-white shadow-[0_20px_50px_rgba(15,23,42,0.14)] transition-all duration-300 ease-out ${
+            open
+              ? "translate-y-0 opacity-100 scale-100"
+              : "-translate-y-3 opacity-0 scale-[0.98]"
+          }`}
+        >
+          <div className="p-3 space-y-2">
             <div className="grid gap-2">
               {navLinks.map((item) => (
                 <Link
                   key={item.label}
                   to={item.to}
                   onClick={() => setOpen(false)}
-                  className="block rounded-2xl bg-white/80 px-4 py-3 text-slate-700 font-semibold shadow-sm border border-white/80 hover:text-[#ef27c7] transition"
+                  className={`block rounded-2xl border px-4 py-3 text-[15px] font-semibold shadow-sm transition-all duration-200 active:scale-[0.98] ${
+                    location.pathname === item.to
+                      ? "border-[#ef27c7]/20 bg-[#ef27c7]/10 text-[#ef27c7] shadow-[0_10px_24px_rgba(239,39,199,0.12)]"
+                      : "border-slate-200 bg-white text-slate-700 hover:border-[#ef27c7]/15 hover:bg-[#ef27c7]/6 hover:text-[#ef27c7]"
+                  }`}
                 >
                   {item.label}
                 </Link>
               ))}
             </div>
 
-            <div className="pt-2 space-y-2">
+            <div className="h-px bg-slate-200/80 my-2" />
+
+            <div className="space-y-2">
               {user ? (
                 <>
                   <Link
                     to="/dashboard"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-2 rounded-2xl bg-white px-4 py-3 text-slate-800 font-semibold border border-white/80 shadow-sm"
+                    className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-slate-800 font-semibold border border-slate-200/70 hover:bg-white transition"
                   >
                     <User className="w-4 h-4 text-[#ef27c7]" />
                     Dashboard
@@ -151,7 +181,7 @@ function Navbar() {
                     <Link
                       to="/admin"
                       onClick={() => setOpen(false)}
-                      className="flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-white font-semibold"
+                      className="flex items-center gap-3 rounded-2xl bg-slate-900 px-4 py-3 text-white font-semibold hover:bg-slate-800 transition"
                     >
                       <Shield className="w-4 h-4" />
                       Admin
@@ -160,7 +190,7 @@ function Navbar() {
 
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-2 rounded-2xl bg-red-500 px-4 py-3 text-white font-semibold"
+                    className="w-full flex items-center gap-3 rounded-2xl bg-red-500 px-4 py-3 text-white font-semibold hover:bg-red-600 transition"
                   >
                     <LogOut className="w-4 h-4" />
                     Logout
@@ -171,7 +201,7 @@ function Navbar() {
                   <Link
                     to="/login"
                     onClick={() => setOpen(false)}
-                    className="block rounded-2xl bg-white/80 px-4 py-3 text-slate-700 font-semibold border border-white/80 shadow-sm"
+                    className="block rounded-2xl bg-slate-50 px-4 py-3 text-slate-700 font-semibold border border-slate-200/70 hover:bg-white transition"
                   >
                     Login
                   </Link>
@@ -179,7 +209,7 @@ function Navbar() {
                   <Link
                     to="/signup"
                     onClick={() => setOpen(false)}
-                    className="block rounded-2xl bg-[#ef27c7] px-4 py-3 text-white font-bold text-center shadow-[0_14px_30px_rgba(239,39,199,0.25)]"
+                    className="block rounded-2xl bg-[#ef27c7] px-4 py-3 text-white font-bold text-center shadow-[0_14px_30px_rgba(239,39,199,0.22)] hover:shadow-[0_18px_35px_rgba(239,39,199,0.28)] transition"
                   >
                     Sign Up
                   </Link>
@@ -188,7 +218,7 @@ function Navbar() {
             </div>
           </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 }

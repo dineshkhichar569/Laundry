@@ -37,7 +37,8 @@ function Services() {
 
           <p className="mt-5 max-w-3xl mx-auto text-base sm:text-lg leading-0 text-slate-500">
             Choose from premium dry cleaning, wash and fold, ironing, and more.
-            Fast pickup, professional care, and reliable delivery for every order.
+            Fast pickup, professional care, and reliable delivery for every
+            order.
           </p>
         </div>
       </section>
