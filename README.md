@@ -70,8 +70,6 @@ LaundryWallah/
 └── README.md
 ```
 
-> Update the folder names above if your actual project uses different names.
-
 ## Main Modules
 
 - **Authentication**: Register, login, protected routes, admin-only access
