@@ -17,10 +17,10 @@ function Login() {
     try {
       const res = await login({ email, password });
       saveUser(res.data);
-      if (!isAdmin()) {
-        navigate("/dashboard", { replace: true });
-      } else {
+      if (res.data.role === "admin") {
         navigate("/admin", { replace: true });
+      } else {
+        navigate("/dashboard", { replace: true });
       }
       window.location.reload();
     } catch (err) {
