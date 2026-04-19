@@ -1,79 +1,260 @@
-# 🧺 Laundry Website  
+# LaundryWallah
 
-A clean, responsive, and modern **Laundry Service** front-end website that helps users explore services, add items to a cart, and book laundry services online.  
-Built using **HTML, CSS, and JavaScript**, and deployed via **Netlify**.
+LaundryWallah is a full-stack laundry service web application built to make laundry booking simple, fast, and convenient. Users can browse services, book laundry pickups, track orders, read blogs, leave reviews, and manage their account through a clean responsive interface. An admin panel is also included for managing services, bookings, users, and blog content.
 
----
+## Features
 
-## 🌐 Live Demo  
-🔗 **View Project:** [Laundry Website (Netlify)](https://66880eda7957cd82484141cd--dainty-alpaca-6096e9.netlify.app/)
+### User Features
+- User signup and login with JWT authentication
+- Browse laundry services and pricing
+- Book laundry services online
+- Track orders using a tracking ID
+- View personal dashboard and booking history
+- Read blog posts
+- Submit and view customer reviews
+- Responsive UI for desktop, tablet, and mobile
 
----
+### Admin Features
+- Admin-only protected routes
+- Manage services
+- Manage bookings
+- Manage users
+- Manage blog posts
 
-## 🧾 Features  
-- Responsive, mobile-friendly layout  
-- Hero section with CTA (“Book a Service Today”)  
-- “Our Achievements” stats section  
-- Service list with “Add Item ➕” feature  
-- Dynamic cart displaying selected items and prices  
-- “Book Now” form for user details (Name, Email, Phone)  
-- Newsletter subscription section  
-- Footer with contact info, quick links, and social icons  
+## Tech Stack
 
----
+### Frontend
+- React
+- Vite
+- Tailwind CSS
+- React Router DOM
+- Axios
+- Lucide React
 
-## 🛠️ Tech Stack  
-- **HTML5** → Structure  
-- **CSS3** → Styling and layout  
-- **JavaScript (ES6)** → Interactivity  
-- **Netlify** → Hosting and deployment  
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT
+- bcryptjs
+- CORS
+- dotenv
 
----
+### Deployment
+- Frontend: Vercel
+- Backend: Render
+- Database: MongoDB Atlas
 
-## 📂 Folder Structure  
+## Project Structure
+
 ```bash
-Laundry/
+LaundryWallah/
 │
-├── assets/ # Images, icons.
-├── index.html # Main landing page
-├── style.css # Stylesheet for animations and smooth interactions
-└── scrip.js # JS file for interactions
+├── client/                 # Frontend (React + Vite)
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── vercel.json
+│
+├── server/                 # Backend (Node + Express)
+│   ├── src/
+│   │   ├── config/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   └── ...
+│   ├── server.js
+│   └── package.json
+│
+└── README.md
 ```
 
+> Update the folder names above if your actual project uses different names.
 
----
+## Main Modules
 
-## ⚙️ Setup Instructions  
-1. Clone this repository  
-   ```bash
-   git clone https://github.com/dineshkhichar569/Laundry.git
-2. Navigate to the project directory
-   ```bash
-   cd Laundry
-3. Open **index.html** in your browser
+- **Authentication**: Register, login, protected routes, admin-only access
+- **Services**: Show available laundry services
+- **Bookings**: Create bookings, view bookings, track orders
+- **Reviews**: Add and display customer reviews
+- **Blogs**: Display blog content for users and admin
+- **Admin Panel**: Manage platform data from one place
 
-## 💡 How It Works  
-1. Browse available laundry services (Dry Cleaning, Wash & Fold, Ironing, etc.).  
-2. Click **Add Item** to add to your cart.  
-3. The “Added Items” table updates dynamically.  
-4. Fill out the **Book Now** form to submit details.  
-5. Subscribe to the newsletter to stay updated.  
+## Environment Variables
 
----
+### Frontend (`client/.env`)
+```env
+VITE_API_URL=http://localhost:8080/api
+```
 
-## 🚀 Future Improvements  
-- Add backend (Node.js / Firebase) to save bookings  
-- Form validation and email notifications  
-- Admin panel for order management  
-- Add animation effects (GSAP / AOS)  
-- Improve accessibility and performance  
+For production:
+```env
+VITE_API_URL=https://your-render-backend-url.onrender.com/api
+```
 
----
+### Backend (`server/.env`)
+```env
+PORT=8080
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+CLIENT_URL=http://localhost:5173
+NODE_ENV=development
+```
 
-## 🧑‍💻 Author  
+For production:
+```env
+MONGO_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_new_secure_secret
+CLIENT_URL=https://your-vercel-frontend-url.vercel.app
+NODE_ENV=production
+```
+
+## Installation and Setup
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/dineshkhichar569/Laundry.git
+cd Laundry
+```
+
+### 2. Install frontend dependencies
+```bash
+cd client
+npm install
+```
+
+### 3. Install backend dependencies
+```bash
+cd ../server
+npm install
+```
+
+## Run the Project Locally
+
+### Start backend
+```bash
+cd server
+npm run start
+```
+
+or if you have nodemon:
+```bash
+npm run dev
+```
+
+### Start frontend
+```bash
+cd client
+npm run dev
+```
+
+Frontend usually runs on:
+```bash
+http://localhost:5173
+```
+
+Backend usually runs on:
+```bash
+http://localhost:8080
+```
+
+## API Base URL
+
+Your frontend Axios setup should use:
+
+```js
+import axios from "axios";
+
+const API = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080/api",
+});
+
+export default API;
+```
+
+## Important Backend Routes
+
+```bash
+/api/auth
+/api/services
+/api/bookings
+/api/reviews
+/api/blogs
+/api/admin
+/api/health
+```
+
+## Deployment Notes
+
+### Frontend on Vercel
+If you are using React Router with Vite, add a `vercel.json` file inside the frontend root:
+
+```json
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ]
+}
+```
+
+This prevents `404 NOT_FOUND` on page refresh for routes like `/about`, `/reviews`, or `/blog`.
+
+### Backend on Render
+Make sure:
+- `MONGO_URI` uses MongoDB Atlas, not local MongoDB
+- `CLIENT_URL` is set to your Vercel frontend URL
+- CORS allows your frontend origin
+- `PORT` uses `process.env.PORT || 5000`
+
+## Available Pages
+
+### Public Pages
+- Home
+- Services
+- About
+- Contact
+- FAQ
+- Pricing
+- Reviews
+- Blog
+- Blog Details
+- Track Order
+- Login
+- Signup
+
+### Protected Pages
+- Book
+- Dashboard
+- My Bookings
+
+### Admin Pages
+- Admin Dashboard
+- Manage Services
+- Manage Bookings
+- Manage Users
+- Manage Blog
+
+## Future Improvements
+- Online payment integration
+- Email notifications
+- SMS order updates
+- Coupon and discount system
+- Order status timeline
+- Profile image upload
+- Analytics dashboard for admin
+
+## Author
+
 **Dinesh Khichar**  
-📧 [mail@site.com](mailto:dinesh.khichar.work.com)  
-🌍 [GitHub Profile](https://github.com/dineshkhichar569)
-💼 [Portfolio Website](https://dineshportfolios.site/)
+Full Stack Developer | MERN | Shopify Developer
 
+- GitHub: https://github.com/dineshkhichar569
+- Project Repo: https://github.com/dineshkhichar569/Laundry
 
+## License
+
+This project is for learning, portfolio, and demonstration purposes.

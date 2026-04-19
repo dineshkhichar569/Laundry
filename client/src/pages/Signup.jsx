@@ -32,7 +32,11 @@ function Signup() {
     try {
       const res = await register(form);
       saveUser(res.data);
-      navigate("/dashboard");
+      if (!isAdmin()) {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate("/admin", { replace: true });
+      }
       window.location.reload();
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed");

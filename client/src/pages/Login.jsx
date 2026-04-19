@@ -17,7 +17,11 @@ function Login() {
     try {
       const res = await login({ email, password });
       saveUser(res.data);
-      navigate("/dashboard");
+      if (!isAdmin()) {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate("/admin", { replace: true });
+      }
       window.location.reload();
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
