@@ -26,6 +26,13 @@ function Navbar() {
     { label: "Contact", to: "/contact" },
   ];
 
+  const adminNavLinks = [
+    { label: "Manage Services", to: "/admin/services" },
+    { label: "Manage Bookings", to: "admin/bookings" },
+    { label: "Manage Users", to: "/admin/users" },
+    { label: "Manage Blogs", to: "/admin/blog" },
+  ];
+
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
@@ -34,47 +41,82 @@ function Navbar() {
     <nav className="sticky top-0 z-50 border-b border-white/50 bg-[#edf5fa]/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <div className="h-[84px] flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-3 shrink-0">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-[#ef27c7] to-[#e400b9] text-white flex items-center justify-center shadow-[0_12px_30px_rgba(239,39,199,0.28)] text-2xl">
-              🧺
-            </div>
+          {!isAdmin() && (
+            <Link to="/" className="flex items-center gap-3 shrink-0">
+              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-[#ef27c7] to-[#e400b9] text-white flex items-center justify-center shadow-[0_12px_30px_rgba(239,39,199,0.28)] text-2xl">
+                🧺
+              </div>
 
-            <div className="leading-tight">
-              <div className="text-[22px] font-extrabold tracking-[-0.03em] text-slate-900">
-                LaundryWallah
+              <div className="leading-tight">
+                <div className="text-[22px] font-extrabold tracking-[-0.03em] text-slate-900">
+                  LaundryWallah
+                </div>
+                <div className="flex items-center gap-1 text-xs font-medium text-slate-500">
+                  <Sparkles className="w-3.5 h-3.5 text-[#ef27c7]" />
+                  Fresh care at your doorstep
+                </div>
               </div>
-              <div className="flex items-center gap-1 text-xs font-medium text-slate-500">
-                <Sparkles className="w-3.5 h-3.5 text-[#ef27c7]" />
-                Fresh care at your doorstep
+            </Link>
+          )}
+
+          {isAdmin() && (
+            <Link to="/admin" className="flex items-center gap-3 shrink-0">
+              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br bg-slate-900 text-white flex items-center justify-center shadow-[0_12px_30px_rgba(239,39,199,0.28)] text-2xl">
+                🧺
               </div>
-            </div>
-          </Link>
+
+              <div className="leading-tight">
+                <div className="text-[22px] font-extrabold tracking-[-0.03em] text-slate-900">
+                  LaundryWallah
+                </div>
+                <div className="flex items-center gap-1 text-xs font-medium text-slate-500">
+                  <Sparkles className="w-3.5 h-3.5 text-slate-900" />
+                  Admin Panel
+                </div>
+              </div>
+            </Link>
+          )}
 
           {/* Desktop menu */}
           <ul className="hidden lg:flex items-center gap-2 rounded-full border border-white/70 bg-white/70 px-3 py-2 shadow-[0_10px_30px_rgba(15,23,42,0.05)] backdrop-blur">
-            {navLinks.map((item) => (
-              <li key={item.label}>
-                <Link
-                  to={item.to}
-                  className="px-4 py-2 rounded-full text-[15px] font-semibold text-slate-700 transition hover:bg-[#ef27c7]/10 hover:text-[#ef27c7]"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {!isAdmin() &&
+              navLinks.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.to}
+                    className="px-4 py-2 rounded-full text-[15px] font-semibold text-slate-700 transition hover:bg-[#ef27c7]/10 hover:text-[#ef27c7]"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+
+            {isAdmin() &&
+              adminNavLinks.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.to}
+                    className="px-4 py-2 rounded-full text-[15px] font-semibold text-slate-700 transition hover:bg-[#ef27c7]/10 hover:text-[#ef27c7]"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
           </ul>
 
           {/* Desktop actions */}
           <div className="hidden lg:flex items-center gap-3">
             {user ? (
               <>
-                <Link
-                  to="/dashboard"
-                  className="inline-flex items-center gap-2 px-4 h-11 rounded-xl bg-white text-slate-800 border border-white/80 shadow-sm font-semibold hover:shadow-md transition"
-                >
-                  <User className="w-4 h-4 text-[#ef27c7]" />
-                  {user.name}
-                </Link>
+                {!isAdmin() && (
+                  <Link
+                    to="/dashboard"
+                    className="inline-flex items-center gap-2 px-4 h-11 rounded-xl bg-white text-slate-800 border border-white/80 shadow-sm font-semibold hover:shadow-md transition"
+                  >
+                    <User className="w-4 h-4 text-[#ef27c7]" />
+                    {user.name}
+                  </Link>
+                )}
 
                 {isAdmin() && (
                   <Link
@@ -148,20 +190,36 @@ function Navbar() {
         >
           <div className="p-3 space-y-2">
             <div className="grid gap-2">
-              {navLinks.map((item) => (
-                <Link
-                  key={item.label}
-                  to={item.to}
-                  onClick={() => setOpen(false)}
-                  className={`block rounded-2xl border px-4 py-3 text-[15px] font-semibold shadow-sm transition-all duration-200 active:scale-[0.98] ${
-                    location.pathname === item.to
-                      ? "border-[#ef27c7]/20 bg-[#ef27c7]/10 text-[#ef27c7] shadow-[0_10px_24px_rgba(239,39,199,0.12)]"
-                      : "border-slate-200 bg-white text-slate-700 hover:border-[#ef27c7]/15 hover:bg-[#ef27c7]/6 hover:text-[#ef27c7]"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {!isAdmin() &&
+                navLinks.map((item) => (
+                  <Link
+                    key={item.label}
+                    to={item.to}
+                    onClick={() => setOpen(false)}
+                    className={`block rounded-2xl border px-4 py-3 text-[15px] font-semibold shadow-sm transition-all duration-200 active:scale-[0.98] ${
+                      location.pathname === item.to
+                        ? "border-[#ef27c7]/20 bg-[#ef27c7]/10 text-[#ef27c7] shadow-[0_10px_24px_rgba(239,39,199,0.12)]"
+                        : "border-slate-200 bg-white text-slate-700 hover:border-[#ef27c7]/15 hover:bg-[#ef27c7]/6 hover:text-[#ef27c7]"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              {isAdmin() &&
+                adminNavLinks.map((item) => (
+                  <Link
+                    key={item.label}
+                    to={item.to}
+                    onClick={() => setOpen(false)}
+                    className={`block rounded-2xl border px-4 py-3 text-[15px] font-semibold shadow-sm transition-all duration-200 active:scale-[0.98] ${
+                      location.pathname === item.to
+                        ? "border-[#ef27c7]/20 bg-[#ef27c7]/10 text-[#ef27c7] shadow-[0_10px_24px_rgba(239,39,199,0.12)]"
+                        : "border-slate-200 bg-white text-slate-700 hover:border-[#ef27c7]/15 hover:bg-[#ef27c7]/6 hover:text-[#ef27c7]"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
             </div>
 
             <div className="h-px bg-slate-200/80 my-2" />
@@ -169,14 +227,16 @@ function Navbar() {
             <div className="space-y-2">
               {user ? (
                 <>
-                  <Link
-                    to="/dashboard"
-                    onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-slate-800 font-semibold border border-slate-200/70 hover:bg-white transition"
-                  >
-                    <User className="w-4 h-4 text-[#ef27c7]" />
-                    Dashboard
-                  </Link>
+                  {!isAdmin() && (
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-slate-800 font-semibold border border-slate-200/70 hover:bg-white transition"
+                    >
+                      <User className="w-4 h-4 text-[#ef27c7]" />
+                      Dashboard
+                    </Link>
+                  )}
 
                   {isAdmin() && (
                     <Link

@@ -26,6 +26,7 @@ import ManageBookings from "./pages/admin/ManageBookings";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageBlog from "./pages/admin/ManageBlog";
 import Blog from "./pages/Blogs";
+import { isAdmin } from "./utils/auth";
 
 function App() {
   return (
@@ -116,7 +117,8 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      <Footer />
+
+      {!isAdmin() && <Footer />}
     </div>
   );
 }
