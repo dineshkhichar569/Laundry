@@ -92,7 +92,8 @@ function ManageServices() {
             </h1>
 
             <p className="mt-5 max-w-2xl text-base text-center sm:text-lg leading-8 text-slate-500">
-              Add new laundry services, update pricing, and keep your service list clean, consistent, and ready for bookings.
+              Add new laundry services, update pricing, and keep your service
+              list clean, consistent, and ready for bookings.
             </p>
           </div>
 
@@ -200,7 +201,7 @@ function ManageServices() {
             </form>
           </div>
 
-          <div className="rounded-2xl border border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_18px_45px_rgba(15,23,42,0.06)] p-4 sm:p-6">
+          <div className="thin-scrollbar h-[500px] overflow-y-auto rounded-2xl border border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_18px_45px_rgba(15,23,42,0.06)] p-4 sm:p-6">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-50 to-sky-50 text-[#ef27c7] flex items-center justify-center shadow-sm">
                 <WashingMachine className="w-5 h-5" />

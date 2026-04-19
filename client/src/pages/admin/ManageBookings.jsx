@@ -86,7 +86,7 @@ function ManageBookings() {
             </p>
           </div>
 
-          <div className="mt-10 grid sm:grid-cols-2 grid-cols-3 gap-2 lg:gap-6">
+          <div className="mt-10 grid sm:grid-cols-5 grid-cols-3 gap-2 lg:gap-6">
             <div className="rounded-2xl border border-slate-100 bg-white p-3 md:p-6 shadow-[0_8px_25px_rgba(15,23,42,0.04)]">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-50 to-sky-50 text-[#ef27c7] flex items-center justify-center">
                 <Package className="w-5 h-5" />
@@ -141,7 +141,7 @@ function ManageBookings() {
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-16 md:pb-24">
-        <div className="rounded-3xl border border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_18px_45px_rgba(15,23,42,0.06)] overflow-hidden">
+        <div className="thin-scrollbar h-[600px] overflow-y-auto rounded-2xl border border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_18px_45px_rgba(15,23,42,0.06)] overflow-hidden">
           <div className="px-4 sm:px-6 pt-8 pb-5 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>
               <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">

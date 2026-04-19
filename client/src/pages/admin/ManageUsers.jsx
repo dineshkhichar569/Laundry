@@ -76,7 +76,7 @@ function ManageUsers() {
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-16 md:pb-24">
-        <div className="rounded-2xl border border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_18px_45px_rgba(15,23,42,0.06)] overflow-hidden">
+        <div className="thin-scrollbar h-[700px] overflow-y-auto  rounded-2xl border border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_18px_45px_rgba(15,23,42,0.06)] overflow-hidden">
           <div className="px-4 sm:px-6 pt-8 pb-5 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>
               <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
