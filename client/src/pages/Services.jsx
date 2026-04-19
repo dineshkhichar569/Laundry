@@ -84,9 +84,6 @@ function Services() {
                 key={s._id}
                 className="group relative rounded-2xl border border-slate-100 bg-white p-6 shadow-[0_8px_25px_rgba(15,23,42,0.04)] transition duration-300 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(239,39,199,0.12)] hover:border-pink-100"
               >
-                <div className="absolute top-5 right-5 text-xs font-bold text-slate-200 group-hover:text-pink-200 transition">
-                  0{index + 1}
-                </div>
 
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-50 to-sky-50 text-[#ef27c7] flex items-center justify-center text-3xl shadow-sm transition duration-300 group-hover:scale-110">
                   {s.icon || "🧺"}

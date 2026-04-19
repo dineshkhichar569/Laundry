@@ -20,6 +20,7 @@ function Navbar() {
     { label: "Home", to: "/" },
     { label: "Services", to: "/services" },
     { label: "Pricing", to: "/pricing" },
+    { label: "Reviews", to: "/reviews" },
     { label: "Blog", to: "/blog" },
     { label: "About", to: "/about" },
     { label: "Contact", to: "/contact" },

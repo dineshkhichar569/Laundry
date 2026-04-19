@@ -55,6 +55,14 @@ function Footer() {
                 <li>
                   <Link
                     className="hover:text-[#ef27c7] transition"
+                    to="/reviews"
+                  >
+                    Reviews
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="hover:text-[#ef27c7] transition"
                     to="/contact"
                   >
                     Contact
